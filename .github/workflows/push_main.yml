@@ -41,9 +41,9 @@ jobs:
         run: |
           docker build . -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_NAME }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}
 
-    - name: Push Docker image to Artifact Registry
-      run: |
-        docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_NAME }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}
+      - name: Push Docker image to Artifact Registry
+        run: |
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_NAME }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}
 
 
       # Deploy to Cloud Run
