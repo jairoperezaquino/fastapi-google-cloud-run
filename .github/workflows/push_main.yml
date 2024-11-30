@@ -8,8 +8,8 @@ env:
   CLOUDRUN_NAME: fastapicloudrun
   REGION: us-central1
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  CLOUDREGISTRY_IMAGE: gcr.io/$GCP_PROJECT_ID/$CLOUDRUN_NAME:latest
-  REGISTRY_NAME: main
+  ARTIFACTREGISTRY_REPOSITORY: main
+  ARTIFACTREGISTRY_IMAGE: $REGION-docker.pkg.dev/$GCP_PROJECT_ID/$ARTIFACTREGISTRY_REPOSITORY/$CLOUDRUN_NAME:${{ github.sha }} 
 
 jobs:
   deploy:
@@ -39,8 +39,8 @@ jobs:
 
       - name: Build and Push Container
         run: |-
-          docker build -t "${{ env.REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.REGISTRY_NAME }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}" ./
-          docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.REGISTRY_NAME }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}"
+          docker build -t "${{ env.ARTIFACTREGISTRY_IMAGE }}" ./
+          docker push "${{ env.ARTIFACTREGISTRY_IMAGE }}"
 
 
       # Deploy to Cloud Run
@@ -50,6 +50,6 @@ jobs:
         with:
           service: ${{ env.CLOUDRUN_NAME }}
           region: ${{ env.REGION }}
-          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.REGISTRY_NAME }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}
+          image: ${{ env.ARTIFACTREGISTRY_IMAGE }}
           env_vars: |- 
             SERVICE=${{ env.CLOUDRUN_NAME }}
