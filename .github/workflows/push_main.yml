@@ -50,6 +50,6 @@ jobs:
         with:
           service: ${{ env.CLOUDRUN_NAME }}
           region: ${{ env.REGION }}
-          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_NAME }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.REGISTRY_NAME }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}
           env_vars: |- 
             SERVICE=${{ env.CLOUDRUN_NAME }}
