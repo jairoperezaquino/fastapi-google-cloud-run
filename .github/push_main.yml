@@ -1,0 +1,49 @@
+name: Deploy to Cloud Run
+on:
+  push:
+    branches:
+      - main
+
+env:
+  CLOUDRUN_NAME: fastapicloudrun
+  CLOUDRUN_REGION: us-central1
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  CLOUDREGISTRY_IMAGE: gcr.io/$GCP_PROJECT_ID/$CLOUDRUN_NAME:latest
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Google Auth
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_SA_EMAIL }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Build and Push Container
+        run: |
+          docker build -t $CLOUDREGISTRY_IMAGE .
+          docker push $CLOUDREGISTRY_IMAGE
+
+      # Deploy to Cloud Run
+      # NOte: Allowing unauthenticated requests has to be done in the Cloud Run console
+      - id: "deploy"
+        uses: "google-github-actions/deploy-cloudrun@v1"
+        with:
+          service: ${{ env.CLOUDRUN_NAME }}
+          region: ${{ env.CLOUDRUN_REGION }}
+          image: ${{ env.CLOUDREGISTRY_IMAGE }}
+          env_vars: |- 
+            SERVICE=${{ env.CLOUDRUN_NAME }}
