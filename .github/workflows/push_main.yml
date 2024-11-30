@@ -8,15 +8,15 @@ env:
   CLOUDRUN_NAME: fastapicloudrun
   REGION: us-central1
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  ARTIFACTREGISTRY_REPOSITORY: main
+  ARTIFACTREGISTRY_REPOSITORY: ${{ secrets.ARTIFACTREGISTRY_REPOSITORY }}
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     permissions:
-      contents: 'read'
-      id-token: 'write'
+      contents: read
+      id-token: write
 
     steps:
       - name: Checkout
@@ -28,15 +28,15 @@ jobs:
         with:
           token_format: 'access_token'
           workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
-          service_account: ${{ secrets.GCP_SA_EMAIL }}
+          service_account: ${{ secrets.GCP_WIF_SA_EMAIL }}
 
-      - name: Set up Cloud SDK
+      - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
       - name: Authorize Docker
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
 
-      - name: Set ARTIFACTREGISTRY_IMAGE
+      - name: Set Artifact Registry image name
         id: set-image
         run: echo "ARTIFACTREGISTRY_IMAGE=${{ env.REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACTREGISTRY_REPOSITORY }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}" >> $GITHUB_ENV
 
@@ -46,7 +46,7 @@ jobs:
           docker push "${{ env.ARTIFACTREGISTRY_IMAGE }}"
 
       # Deploy to Cloud Run
-      # NOte: Allowing unauthenticated requests has to be done in the Cloud Run console
+      # Note: Allowing unauthenticated requests has to be done in the Cloud Run console
       - id: "deploy"
         uses: "google-github-actions/deploy-cloudrun@v1"
         with:
