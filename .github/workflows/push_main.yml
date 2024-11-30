@@ -34,8 +34,8 @@ jobs:
 
       - name: Build and Push Container
         run: |
-          docker build -t $CLOUDREGISTRY_IMAGE .
-          docker push $CLOUDREGISTRY_IMAGE
+          docker build -t ${{ env.CLOUDREGISTRY_IMAGE }} .
+          docker push ${{ env.CLOUDREGISTRY_IMAGE }}
 
       # Deploy to Cloud Run
       # NOte: Allowing unauthenticated requests has to be done in the Cloud Run console
