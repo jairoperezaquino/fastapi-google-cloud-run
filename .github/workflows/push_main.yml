@@ -9,7 +9,6 @@ env:
   REGION: us-central1
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   ARTIFACTREGISTRY_REPOSITORY: main
-  ARTIFACTREGISTRY_IMAGE: ${{ env.REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACTREGISTRY_REPOSITORY }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}
 
 jobs:
   deploy:
@@ -34,14 +33,17 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Authorize Docker push
+      - name: Authorize Docker
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+
+      - name: Set ARTIFACTREGISTRY_IMAGE
+        id: set-image
+        run: echo "ARTIFACTREGISTRY_IMAGE=${{ env.REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACTREGISTRY_REPOSITORY }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}" >> $GITHUB_ENV
 
       - name: Build and Push Container
         run: |-
           docker build -t "${{ env.ARTIFACTREGISTRY_IMAGE }}" ./
           docker push "${{ env.ARTIFACTREGISTRY_IMAGE }}"
-
 
       # Deploy to Cloud Run
       # NOte: Allowing unauthenticated requests has to be done in the Cloud Run console
