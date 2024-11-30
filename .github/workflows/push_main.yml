@@ -6,9 +6,10 @@ on:
 
 env:
   CLOUDRUN_NAME: fastapicloudrun
-  CLOUDRUN_REGION: us-central1
+  REGION: us-central1
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   CLOUDREGISTRY_IMAGE: gcr.io/$GCP_PROJECT_ID/$CLOUDRUN_NAME:latest
+  REGISRTY_NAME: main
 
 jobs:
   deploy:
@@ -26,25 +27,24 @@ jobs:
         id: auth
         uses: google-github-actions/auth@v2
         with:
-          token_format: access_token
+          token_format: 'access_token'
           workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
           service_account: ${{ secrets.GCP_SA_EMAIL }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Docker Auth
-        id: docker-auth
-        uses: 'docker/login-action@v1'
-        with:
-          username: 'oauth2accesstoken'
-          password: '${{ steps.auth.outputs.access_token }}'
-          registry: '${{ env.CLOUDRUN_REGION }}-docker.pkg.dev'
+      - name: Authorize Docker push
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
 
-      - name: Build and Push Container
+      - name: Build and tag Docker image
         run: |
-          docker build -t ${{ env.CLOUDREGISTRY_IMAGE }} .
-          docker push ${{ env.CLOUDREGISTRY_IMAGE }}
+          docker build . -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_NAME }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}
+
+    - name: Push Docker image to Artifact Registry
+      run: |
+        docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_NAME }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}
+
 
       # Deploy to Cloud Run
       # NOte: Allowing unauthenticated requests has to be done in the Cloud Run console
@@ -52,7 +52,7 @@ jobs:
         uses: "google-github-actions/deploy-cloudrun@v1"
         with:
           service: ${{ env.CLOUDRUN_NAME }}
-          region: ${{ env.CLOUDRUN_REGION }}
-          image: ${{ env.CLOUDREGISTRY_IMAGE }}
+          region: ${{ env.REGION }}
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_NAME }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}
           env_vars: |- 
             SERVICE=${{ env.CLOUDRUN_NAME }}
