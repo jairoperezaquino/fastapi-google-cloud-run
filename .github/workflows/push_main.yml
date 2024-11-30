@@ -9,7 +9,7 @@ env:
   REGION: us-central1
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   CLOUDREGISTRY_IMAGE: gcr.io/$GCP_PROJECT_ID/$CLOUDRUN_NAME:latest
-  REGISRTY_NAME: main
+  REGISTRY_NAME: main
 
 jobs:
   deploy:
