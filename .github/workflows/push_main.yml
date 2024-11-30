@@ -37,13 +37,10 @@ jobs:
       - name: Authorize Docker push
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
 
-      - name: Build and tag Docker image
-        run: |
-          docker build . -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_NAME }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}
-
-      - name: Push Docker image to Artifact Registry
-        run: |
-          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY_NAME }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}
+      - name: Build and Push Container
+        run: |-
+          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.REGISTRY_NAME }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}" ./
+          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.REGISTRY_NAME }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}"
 
 
       # Deploy to Cloud Run
