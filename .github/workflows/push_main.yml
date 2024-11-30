@@ -9,7 +9,7 @@ env:
   REGION: us-central1
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   ARTIFACTREGISTRY_REPOSITORY: main
-  ARTIFACTREGISTRY_IMAGE: $REGION-docker.pkg.dev/$GCP_PROJECT_ID/$ARTIFACTREGISTRY_REPOSITORY/$CLOUDRUN_NAME:${{ github.sha }} 
+  ARTIFACTREGISTRY_IMAGE: ${{ env.REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACTREGISTRY_REPOSITORY }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}
 
 jobs:
   deploy:
