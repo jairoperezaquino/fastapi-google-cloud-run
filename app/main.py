@@ -16,6 +16,7 @@ if settings.environment == "PROD":
     setup_logging()
     app.add_middleware(LoggingMiddleware)
 else:
+    # TODO: setup local logging - it's only printing ERROR and WARNING logs
     logger.setLevel(logging.DEBUG)
 
 
