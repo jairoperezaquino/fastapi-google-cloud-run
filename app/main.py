@@ -25,4 +25,4 @@ async def root():
     logger.error('ERROR LOG')
     logger.warning('WARNING LOG')
     logger.info('INFO LOG')
-    return {'message': 'Hello World'}
+    return {'message': 'Hello World', 'environment': settings.environment}
