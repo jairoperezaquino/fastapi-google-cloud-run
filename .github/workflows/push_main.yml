@@ -7,7 +7,6 @@ on:
 env:
   CLOUDRUN_NAME: fastapicloudrun
   REGION: us-central1
-  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   ARTIFACTREGISTRY_REPOSITORY: ${{ secrets.ARTIFACTREGISTRY_REPOSITORY }}
 
 jobs:
@@ -38,7 +37,7 @@ jobs:
 
       - name: Set Artifact Registry image name
         id: set-image
-        run: echo "ARTIFACTREGISTRY_IMAGE=${{ env.REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACTREGISTRY_REPOSITORY }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}" >> $GITHUB_ENV
+        run: echo "ARTIFACTREGISTRY_IMAGE=${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.ARTIFACTREGISTRY_REPOSITORY }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}" >> $GITHUB_ENV
 
       - name: Build and Push Container
         run: |-
