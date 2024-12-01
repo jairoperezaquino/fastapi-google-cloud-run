@@ -7,12 +7,12 @@ from fastapi import FastAPI
 from pydantic_settings import BaseSettings
 
 class Setttings(BaseSettings):
-    environment: str = "production"
+    environment: str = "DEV"
 
 settings = Setttings()
 app = FastAPI()
 
-if settings.environment == "production":
+if settings.environment == "PROD":
     setup_logging()
     app.add_middleware(LoggingMiddleware)
 else:
