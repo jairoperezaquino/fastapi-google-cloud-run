@@ -3,7 +3,7 @@ import re
 
 from google.cloud.logging_v2.handlers import CloudLoggingFilter
 
-from app.cloud_logging.middleware import http_request_context, cloud_trace_context
+from cloud_logging.middleware import http_request_context, cloud_trace_context
 
 
 class GoogleCloudLogFilter(CloudLoggingFilter):

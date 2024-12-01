@@ -1,7 +1,7 @@
 import logging
 from fastapi.logger import logger
-from app.cloud_logging.middleware import LoggingMiddleware
-from app.cloud_logging.setup import setup_logging
+from cloud_logging.middleware import LoggingMiddleware
+from cloud_logging.setup import setup_logging
 
 from fastapi import FastAPI
 from pydantic_settings import BaseSettings

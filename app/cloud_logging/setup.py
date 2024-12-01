@@ -2,7 +2,7 @@ import logging
 
 import google.cloud.logging
 
-from app.cloud_logging.filter import GoogleCloudLogFilter
+from cloud_logging.filter import GoogleCloudLogFilter
 from fastapi.logger import logger
 
 
