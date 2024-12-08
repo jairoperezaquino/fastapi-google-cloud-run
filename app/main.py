@@ -16,8 +16,13 @@ if settings.environment == "PROD":
     setup_logging()
     app.add_middleware(LoggingMiddleware)
 else:
-    # TODO: setup local logging - it's only printing ERROR and WARNING logs
+    # Setup local logging
     logger.setLevel(logging.DEBUG)
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
 
 
 @app.get("/")
