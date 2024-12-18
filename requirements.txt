@@ -1,4 +1,4 @@
 fastapi[standard]
-fastapi-cli[standard]==0.0.5
+fastapi-cli[standard]
 google-cloud-logging
 pydantic-settings
