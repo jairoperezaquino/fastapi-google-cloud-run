@@ -4,21 +4,16 @@ from app.cloud_logging.middleware import LoggingMiddleware
 from app.cloud_logging.setup import setup_logging
 
 from fastapi import FastAPI
-from pydantic_settings import BaseSettings
+from app.config import settings
 
 
-class Setttings(BaseSettings):
-    environment: str = "DEV"
-
-
-settings = Setttings()
 app = FastAPI()
 
-if settings.environment == "PROD":
+if settings.is_prod:
     setup_logging()
     app.add_middleware(LoggingMiddleware)
 else:
-    # Setup local logging
+    # Setup local logging 
     logger.setLevel(logging.DEBUG)
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.DEBUG)
