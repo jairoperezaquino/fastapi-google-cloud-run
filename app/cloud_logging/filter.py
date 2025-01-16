@@ -7,17 +7,16 @@ from app.cloud_logging.middleware import http_request_context, cloud_trace_conte
 
 
 class GoogleCloudLogFilter(CloudLoggingFilter):
-
     def filter(self, record: logging.LogRecord) -> bool:
         record.http_request = http_request_context.get()
 
         trace = cloud_trace_context.get()
-        split_header = trace.split('/', 1)
+        split_header = trace.split("/", 1)
 
         record.trace = f"projects/{self.project}/traces/{split_header[0]}"
 
         header_suffix = split_header[1]
-        record.span_id = re.findall(r'^\w+', header_suffix)[0]
+        record.span_id = re.findall(r"^\w+", header_suffix)[0]
 
         super().filter(record)
 

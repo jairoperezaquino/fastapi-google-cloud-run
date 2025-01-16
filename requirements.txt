@@ -2,3 +2,5 @@ fastapi[standard]
 fastapi-cli[standard]
 google-cloud-logging
 pydantic-settings
+ruff
+pre-commit
