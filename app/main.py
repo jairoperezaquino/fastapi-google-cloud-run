@@ -13,7 +13,7 @@ if settings.is_prod:
     setup_logging()
     app.add_middleware(LoggingMiddleware)
 else:
-    # Setup local logging 
+    # Setup local logging
     logger.setLevel(logging.DEBUG)
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.DEBUG)

@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings
 
+
 class Settings(BaseSettings):
     environment: str = "DEV"
 
@@ -10,5 +11,6 @@ class Settings(BaseSettings):
     @property
     def is_dev(self) -> bool:
         return self.environment == "DEV"
+
 
 settings = Settings()
