@@ -7,12 +7,12 @@ from app.logging.setup import setup_logging
 
 
 @asynccontextmanager
-async def lifesap(app: FastAPI):
+async def lifespan(app: FastAPI):
     setup_logging(app)
     yield
     logger.info("Shutting down")
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/")
