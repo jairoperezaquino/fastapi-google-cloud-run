@@ -1,28 +1,11 @@
-import logging
-from fastapi.logger import logger
-from app.cloud_logging.middleware import LoggingMiddleware
-from app.cloud_logging.setup import setup_logging
-
 from fastapi import FastAPI
-from app.config import settings
+from fastapi.logger import logger
 
+from app.config import settings
+from app.logging.setup import setup_logging
 
 app = FastAPI()
-
-if settings.is_prod:
-    setup_logging()
-    app.add_middleware(LoggingMiddleware)
-else:
-    # Setup local logging
-    logger.setLevel(logging.DEBUG)
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter(
-        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
-    console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
-
+setup_logging(app)
 
 @app.get("/")
 async def root():

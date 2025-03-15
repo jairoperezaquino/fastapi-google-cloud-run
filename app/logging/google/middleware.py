@@ -1,5 +1,5 @@
-import contextvars
 import sys
+import contextvars
 
 from fastapi.logger import logger
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
