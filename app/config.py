@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     @property
     def is_dev(self) -> bool:
         return self.environment == "DEV"
-    
+
     @property
     def is_local(self) -> bool:
         return self.environment == "LOCAL"

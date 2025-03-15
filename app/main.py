@@ -7,6 +7,7 @@ from app.logging.setup import setup_logging
 app = FastAPI()
 setup_logging(app)
 
+
 @app.get("/")
 async def root():
     logger.debug("DEBUG LOG")

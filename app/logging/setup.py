@@ -5,6 +5,7 @@ import logging
 from app.config import settings
 from app.logging.google.setup import setup_google_logging
 
+
 def setup_local_logging():
     logger.setLevel(logging.DEBUG)
     console_handler = logging.StreamHandler()
@@ -14,6 +15,7 @@ def setup_local_logging():
     )
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
+
 
 def setup_logging(app: FastAPI):
     setup_local_logging() if settings.is_local else setup_google_logging(app)

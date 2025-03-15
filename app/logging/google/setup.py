@@ -16,5 +16,5 @@ def setup_google_logging(app: FastAPI = None):
     logger.handlers = []
     logger.addHandler(handler)
     logger.setLevel(logging.DEBUG)
-    
+
     app.add_middleware(LoggingMiddleware)
