@@ -1,11 +1,17 @@
 from fastapi import FastAPI
 from fastapi.logger import logger
+from contextlib import asynccontextmanager
 
 from app.config import settings
 from app.logging.setup import setup_logging
 
 app = FastAPI()
-setup_logging(app)
+
+@asynccontextmanager
+async def lifesap(app: FastAPI):
+    setup_logging(app)
+    yield
+    logger.info("Shutting down")
 
 
 @app.get("/")
