@@ -4,7 +4,6 @@ import logging
 import google.cloud.logging
 
 from app.logging.google.filter import GoogleCloudLogFilter
-from app.logging.google.middleware import LoggingMiddleware
 
 
 def setup_google_logging(app: FastAPI):
