@@ -7,7 +7,7 @@ from app.logging.google.filter import GoogleCloudLogFilter
 from app.logging.google.middleware import LoggingMiddleware
 
 
-def setup_google_logging(app: FastAPI = None):
+def setup_google_logging(app: FastAPI):
     client = google.cloud.logging.Client()
     handler = client.get_default_handler()
     handler.setLevel(logging.DEBUG)
@@ -16,5 +16,3 @@ def setup_google_logging(app: FastAPI = None):
     logger.handlers = []
     logger.addHandler(handler)
     logger.setLevel(logging.DEBUG)
-
-    app.add_middleware(LoggingMiddleware)

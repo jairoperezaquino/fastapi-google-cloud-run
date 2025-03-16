@@ -3,7 +3,7 @@ from fastapi.logger import logger
 from contextlib import asynccontextmanager
 
 from app.config import settings
-from app.logging.setup import setup_logging
+from app.logging.setup import setup_logging, setup_logging_middleware
 
 
 @asynccontextmanager
@@ -13,6 +13,7 @@ async def lifespan(app: FastAPI):
     logger.info("Shutting down")
 
 app = FastAPI(lifespan=lifespan)
+setup_logging_middleware(app)
 
 
 @app.get("/")
