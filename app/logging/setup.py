@@ -4,7 +4,7 @@ import logging
 
 from app.config import settings
 from app.logging.google.setup import setup_google_logging
-from app.logging.google.middleware import LoggingMiddleware
+from app.logging.google.middleware import GoogleLoggingMiddleware
 
 
 
@@ -21,6 +21,10 @@ def setup_local_logging():
 
 def setup_logging(app: FastAPI):
     setup_local_logging() if settings.is_local else setup_google_logging(app)
+    return None
 
 def setup_logging_middleware(app: FastAPI):
-    app.add_middleware(LoggingMiddleware)
+    if settings.is_local:
+        return
+    app.add_middleware(GoogleLoggingMiddleware)
+    return None
