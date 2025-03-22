@@ -1,9 +1,14 @@
 FROM python:3.11-slim-bullseye
 
-ENV PYTHONUNBUFFERED True
+ENV PYTHONUNBUFFERED=True
 
-ENV APP_HOME /app
+ENV APP_HOME=/app
 WORKDIR ${APP_HOME}
+
+RUN apt-get update && \
+    apt-get upgrade -y --no-install-recommends && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Virtual environment
 ENV VIRTUAL_ENV=/opt/venv
@@ -17,4 +22,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application
 COPY . .
 
-CMD exec fastapi run app/main.py --port ${PORT:-8080}
+CMD ["sh", "-c", "exec fastapi run app/main.py --port ${PORT:-8080}"]
