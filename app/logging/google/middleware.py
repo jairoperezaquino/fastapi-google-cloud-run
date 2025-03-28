@@ -36,7 +36,8 @@ class GoogleLoggingMiddleware(BaseHTTPMiddleware):
         try:
             return await call_next(request)
         except Exception as ex:
-            logger.debug(f"Request failed: {ex}")
+            logger.exception(f"Request failed: {ex}")
             return JSONResponse(
-                status_code=500, content={"success": False, "message": ex}
+                status_code=500,
+                content={"success": False, "message": "Internal server error"},
             )

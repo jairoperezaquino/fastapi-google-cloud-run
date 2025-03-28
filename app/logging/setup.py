@@ -7,7 +7,6 @@ from app.logging.google.setup import setup_google_logging
 from app.logging.google.middleware import GoogleLoggingMiddleware
 
 
-
 def setup_local_logging():
     logger.setLevel(logging.DEBUG)
     console_handler = logging.StreamHandler()
@@ -22,6 +21,7 @@ def setup_local_logging():
 def setup_logging(app: FastAPI):
     setup_local_logging() if settings.is_local else setup_google_logging(app)
     return None
+
 
 def setup_logging_middleware(app: FastAPI):
     if settings.is_local:
