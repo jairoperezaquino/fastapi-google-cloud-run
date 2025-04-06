@@ -1,4 +1,4 @@
-# FastAPI - Cloud Run
+# FastAPI - Google Cloud Run
 
 A template for deploying a FastAPI application on Google Cloud Run.
 
