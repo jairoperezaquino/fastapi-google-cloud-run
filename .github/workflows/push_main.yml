@@ -5,9 +5,8 @@ on:
       - main
 
 env:
-  CLOUDRUN_NAME: fastapicloudrun
+  SERVICE_NAME: fastapicloudrun
   REGION: us-central1
-  ARTIFACTREGISTRY_REPOSITORY: ${{ secrets.ARTIFACTREGISTRY_REPOSITORY }}
 
 jobs:
   ruff:
@@ -49,7 +48,7 @@ jobs:
 
       - name: Set Artifact Registry image name
         id: set-image
-        run: echo "ARTIFACTREGISTRY_IMAGE=${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.ARTIFACTREGISTRY_REPOSITORY }}/${{ env.CLOUDRUN_NAME }}:${{ github.sha }}" >> $GITHUB_ENV
+        run: echo "ARTIFACTREGISTRY_IMAGE=${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME }}/${{ env.SERVICE_NAME }}:${{ github.sha }}" >> $GITHUB_ENV
 
       - name: Build and Push Container
         run: |-
@@ -59,11 +58,11 @@ jobs:
       # Deploy to Cloud Run
       # Note: Allowing unauthenticated requests has to be done in the Cloud Run console
       - id: "deploy"
-        uses: "google-github-actions/deploy-cloudrun@v1"
+        uses: "google-github-actions/deploy-cloudrun@v2"
         with:
-          service: ${{ env.CLOUDRUN_NAME }}
+          service: ${{ env.SERVICE_NAME }}
           region: ${{ env.REGION }}
           image: ${{ env.ARTIFACTREGISTRY_IMAGE }}
           env_vars: |- 
-            SERVICE=${{ env.CLOUDRUN_NAME }}
+            SERVICE=${{ env.SERVICE_NAME }}
             ENVIRONMENT=PROD
