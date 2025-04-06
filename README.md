@@ -11,7 +11,7 @@ A template for deploying a FastAPI application on Google Cloud Run.
 
 ### Prerequisites
 
-- Python 3.11+
+- Python 3.12+
 - Docker
 
 ### Run Locally
@@ -42,10 +42,15 @@ Deployment is automated with GitHub Actions, but you'll need to set up a few ite
 
 Set the following secrets in your GitHub repository (do not expose these publicly):
 
-- `ARTIFACTREGISTRY_REPOSITORY`: Name of the repository, e.g., `myrepo`.
+- `SERVICE_NAME`: Name of your service, e.g., `fastapi-cloud-run`.
 - `GCP_PROJECT_ID`: Your project ID, e.g., `9876543210`.
 - `GCP_WIF_PROVIDER`: Your Workload Identity Federation provider full name, formatted as `projects/${PROJECT_ID}/locations/global/workloadIdentityPools/${POOL_NAME}/providers/${PROVIDER_NAME}`.
 - `GCP_WIF_SA_EMAIL`: Service account email to impersonate.
+
+The deployment workflow will:
+1. Run Ruff checks for code quality
+2. Build and push the Docker image to Google Artifact Registry
+3. Deploy the service to Cloud Run in the specified region
 
 Refer to `.github/workflows/push_main.yml` for more details on the deployment process.
 

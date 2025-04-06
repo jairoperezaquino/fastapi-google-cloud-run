@@ -5,7 +5,7 @@ on:
       - main
 
 env:
-  SERVICE_NAME: fastapicloudrun
+  SERVICE_NAME: fastapi-cloud-run
   REGION: us-central1
 
 jobs:
