@@ -66,3 +66,5 @@ jobs:
           env_vars: |- 
             SERVICE=${{ env.SERVICE_NAME }}
             ENVIRONMENT=PROD
+          secrets: |-
+            API_KEY=fastapi-cloud-run_api-key:latest

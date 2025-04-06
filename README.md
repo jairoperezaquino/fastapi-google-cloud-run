@@ -6,6 +6,8 @@ A template for deploying a FastAPI application on Google Cloud Run.
 
 - **Cloud Logging**: Integration with Google Cloud Logging, ensuring logs are captured with the appropriate severity levels. ⭐ Credits to Florian Flock's [article](https://dev.to/floflock/enable-feature-rich-logging-for-fastapi-on-google-cloud-logging-j3i).
 - **CI/CD**: Automated deployment using GitHub Actions. 🚀
+- **HTTP Async Support**: Built-in support for async HTTP requests using [httpx](https://github.com/encode/httpx) for better performance and scalability.
+- **API Key Authentication**: Support for API Key authentication through both Query Parameters and HTTP Headers.
 
 ## Setup
 
